@@ -1,4 +1,4 @@
-function Gameboard() {
+const Gameboard = (function() {
     const board = ["","","","","","","","",""];
 
     return {
@@ -9,10 +9,9 @@ function Gameboard() {
             return {board};
         }
     }
-};
+})();
 
-const turn = Gameboard();
-turn.move(2, "X");
-turn.move(4, "O");
+Gameboard.move(2, "X");
+Gameboard.move(4, "O");
 
-console.log(turn.getBoard());
+console.log(Gameboard.getBoard());
