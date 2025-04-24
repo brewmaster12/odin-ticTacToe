@@ -6,7 +6,9 @@ function Gameboard() {
     }
 
     const move = (place, player) =>  {
+        if (!board[place]) {
         board.splice(place, 1, player)
+        } else console.log("THAT PLACE IS ALREADY OCCUPIED");
     };
 
     const getBoard = () => board;
@@ -29,7 +31,6 @@ function gameController() {
     const getActivePlayer = () => activePlayer;
 
     const printNewRound = () => {
-        board.getBoard();
         console.log(board.getBoard());
     }
 
