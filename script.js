@@ -49,7 +49,7 @@ function gameController() {
             win[a] && win[a] === win[b] && win[a] === win[c]
         );
 
-        const hasTie = win.every(place => place);
+        const hasTie = !win.includes("");
     
         if (hasWinner) console.log("WIN");
         if (hasTie) console.log("TIE");
