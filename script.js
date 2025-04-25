@@ -48,8 +48,11 @@ function gameController() {
         const hasWinner = winningLines.some(([a, b, c]) => 
             win[a] && win[a] === win[b] && win[a] === win[c]
         );
+
+        const hasTie = win.every(place => place);
     
         if (hasWinner) console.log("WIN");
+        if (hasTie) console.log("TIE");
     };
 
     const takeTurn = (place) => {
@@ -69,4 +72,4 @@ function gameController() {
 
 const game = gameController();
 
-/* console.log(game.takeTurn(3)); */
+/* game.takeTurn(3) */
