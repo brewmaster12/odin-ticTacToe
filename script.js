@@ -9,8 +9,9 @@ function Gameboard() {
         // Make sure place is not already taken
         if (!board[place]) {
             // Place marker
-            board.splice(place, 1, player)
-        } else console.log("THAT PLACE IS ALREADY TAKEN");
+            board.splice(place, 1, player);
+            return true;
+        }
     };
 
     const getBoard = () => board;
@@ -60,11 +61,16 @@ function gameController() {
     };
 
     const takeTurn = (place) => {
-        board.move(place, getActivePlayer());
+        // Make move, making sure place isn't already taken
+        const placeCheck = board.move(place, getActivePlayer());
 
-        checkForWin();
-        printNewRound();
-        if (!winner && !tie) switchPlayerTurn();
+        // Only run if place isn't already taken
+        if (placeCheck === true) {
+            checkForWin();
+            printNewRound();
+            // Check for winner or a tie
+            if (!winner && !tie) switchPlayerTurn();
+        }
     };
 
     
