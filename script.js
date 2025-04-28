@@ -19,6 +19,8 @@ function Gameboard() {
 };
 
 
+let winner;
+let tie;
 
 function gameController() {
     const board = Gameboard();
@@ -32,9 +34,11 @@ function gameController() {
     };
     const getActivePlayer = () => activePlayer;
 
-    /* const printNewRound = () => {
+    const printNewRound = () => {
         console.log(board.getBoard());
-    } */
+    }
+
+    
 
     const checkForWin = () => {
         const win = board.getBoard();
@@ -51,27 +55,29 @@ function gameController() {
 
         const hasTie = win.every(place => place);
     
-        if (hasWinner) console.log("WIN");
-        if (hasTie) console.log("TIE");
+        if (hasWinner) winner = 1;
+        if (hasTie) tie = 1;
     };
 
     const takeTurn = (place) => {
         board.move(place, getActivePlayer());
 
-        switchPlayerTurn();
-        /* printNewRound(); */
         checkForWin();
+        printNewRound();
+        if (!winner && !tie) switchPlayerTurn();
     };
 
     
     // Initialise game
-    /* printNewRound(); */
+    printNewRound();
 
     return {takeTurn, getActivePlayer, getBoard: board.getBoard};
 };
 
 
 /* game.takeTurn(3) */
+
+
 
 function ScreenController() {
     const game = gameController();
@@ -80,11 +86,16 @@ function ScreenController() {
 
     const updateScreen = () => {
         boardDiv.textContent = "";
-
         const board = game.getBoard();
         const activePlayer = game.getActivePlayer();
 
-        playerTurnDiv.textContent = `${activePlayer}'s turn...`;
+        if (winner) {
+            playerTurnDiv.textContent = `${activePlayer} WINS`;
+        } else if (tie && !winner) {
+            playerTurnDiv.textContent = `TIE`;
+        } else {
+            playerTurnDiv.textContent = `${activePlayer}'s turn...`;
+        }
 
         board.forEach((element, index) => {
             const cellButton = document.createElement("button");
@@ -108,6 +119,7 @@ function ScreenController() {
     boardDiv.addEventListener("click", clickHandlerBoard);
 
     updateScreen();
+
     
 }
 
