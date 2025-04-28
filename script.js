@@ -32,9 +32,9 @@ function gameController() {
     };
     const getActivePlayer = () => activePlayer;
 
-    const printNewRound = () => {
+    /* const printNewRound = () => {
         console.log(board.getBoard());
-    }
+    } */
 
     const checkForWin = () => {
         const win = board.getBoard();
@@ -49,7 +49,7 @@ function gameController() {
             win[a] && win[a] === win[b] && win[a] === win[c]
         );
 
-        const hasTie = !win.includes("");
+        const hasTie = win.every(place => place);
     
         if (hasWinner) console.log("WIN");
         if (hasTie) console.log("TIE");
@@ -59,17 +59,56 @@ function gameController() {
         board.move(place, getActivePlayer());
 
         switchPlayerTurn();
-        printNewRound();
+        /* printNewRound(); */
         checkForWin();
     };
 
     
     // Initialise game
-    printNewRound();
+    /* printNewRound(); */
 
-    return {takeTurn};
+    return {takeTurn, getActivePlayer, getBoard: board.getBoard};
 };
 
-const game = gameController();
 
 /* game.takeTurn(3) */
+
+function ScreenController() {
+    const game = gameController();
+    const playerTurnDiv = document.querySelector('.turn');
+    const boardDiv = document.querySelector('.board');
+
+    const updateScreen = () => {
+        boardDiv.textContent = "";
+
+        const board = game.getBoard();
+        const activePlayer = game.getActivePlayer();
+
+        playerTurnDiv.textContent = `${activePlayer}'s turn...`;
+
+        board.forEach((element, index) => {
+            const cellButton = document.createElement("button");
+            cellButton.classList.add("cell");
+
+            cellButton.dataset.cell = index;
+
+            cellButton.textContent = element;
+            boardDiv.appendChild(cellButton);
+        })
+    }
+
+    function clickHandlerBoard(e) {
+        const cell = e.target.dataset.cell;
+        // Make sure I've clicked a column and not the gaps in between
+        if (!cell) return;
+        
+        game.takeTurn(cell);
+        updateScreen();
+    }
+    boardDiv.addEventListener("click", clickHandlerBoard);
+
+    updateScreen();
+    
+}
+
+ScreenController();
