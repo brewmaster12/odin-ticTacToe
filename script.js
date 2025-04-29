@@ -15,8 +15,14 @@ function Gameboard() {
     };
 
     const getBoard = () => board;
+
+    const resetBoard = () => {
+        for (i = 0; i < 9; i++) {
+            board.splice(i, 1, "");
+        }
+    }
     
-    return {move, getBoard}
+    return {move, getBoard, resetBoard}
 };
 
 
@@ -56,12 +62,12 @@ function gameController() {
 
         const hasTie = win.every(place => place);
     
-        if (hasWinner) winner = 1;
-        if (hasTie) tie = 1;
+        if (hasWinner) winner = true;
+        if (hasTie) tie = true;
     };
 
     const takeTurn = (place) => {
-        // Make move, making sure place isn't already taken
+        // Make move and check sure place isn't already taken
         const placeCheck = board.move(place, getActivePlayer());
 
         // Only run if place isn't already taken
@@ -77,7 +83,7 @@ function gameController() {
     // Initialise game
     printNewRound();
 
-    return {takeTurn, getActivePlayer, getBoard: board.getBoard};
+    return {takeTurn, getActivePlayer, getBoard: board.getBoard, resetBoard: board.resetBoard};
 };
 
 
@@ -126,7 +132,15 @@ function ScreenController() {
 
     updateScreen();
 
-    
+    // New Game button
+    document.getElementById("newGameBtn").addEventListener("click", () => {
+        winner = null;
+        tie = null;
+        game.resetBoard();
+        
+        updateScreen();
+    })
 }
 
 ScreenController();
+
