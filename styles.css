@@ -7,5 +7,7 @@
     grid-template: repeat(3, 100px) / repeat(3, 100px);
 }
 
-.cell {
+dialog[open] {
+    display: grid;
+    grid-template-columns: 200px;
 }

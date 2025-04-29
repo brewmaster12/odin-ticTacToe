@@ -29,10 +29,19 @@ function Gameboard() {
 let winner;
 let tie;
 
-function gameController() {
+function gameController(playerOneName, playerTwoName) {
     const board = Gameboard();
 
-    const players = ["X", "O"];
+    const players = [
+        {
+            name: playerOneName,
+            token: "X"
+        },
+        {
+            name: playerTwoName,
+            token: "O"
+        }
+    ];
 
     let activePlayer = players[0];
 
@@ -68,7 +77,7 @@ function gameController() {
 
     const takeTurn = (place) => {
         // Make move and check sure place isn't already taken
-        const placeCheck = board.move(place, getActivePlayer());
+        const placeCheck = board.move(place, getActivePlayer().token);
 
         // Only run if place isn't already taken
         if (placeCheck === true) {
@@ -91,8 +100,8 @@ function gameController() {
 
 
 
-function ScreenController() {
-    const game = gameController();
+function ScreenController(playerOneName, playerTwoName) {
+    const game = gameController(playerOneName, playerTwoName);
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
 
@@ -102,11 +111,11 @@ function ScreenController() {
         const activePlayer = game.getActivePlayer();
 
         if (winner) {
-            playerTurnDiv.textContent = `${activePlayer} WINS`;
+            playerTurnDiv.textContent = `${activePlayer.name} WINS`;
         } else if (tie && !winner) {
             playerTurnDiv.textContent = `TIE`;
         } else {
-            playerTurnDiv.textContent = `${activePlayer}'s turn...`;
+            playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
         }
 
         board.forEach((element, index) => {
@@ -137,10 +146,20 @@ function ScreenController() {
         winner = null;
         tie = null;
         game.resetBoard();
-        
         updateScreen();
     })
 }
 
-ScreenController();
 
+const dialog = document.querySelector("dialog");
+dialog.showModal();
+
+const playerOneName = document.querySelector("#playerOneName");
+const playerTwoName = document.querySelector("#playerTwoName");
+
+
+document.getElementById("submit").addEventListener("click", (event) => {
+    event.preventDefault();
+    dialog.close();
+    ScreenController(playerOneName.value, playerTwoName.value);
+})
